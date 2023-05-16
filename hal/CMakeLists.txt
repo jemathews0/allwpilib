@@ -53,7 +53,7 @@ target_include_directories(hal PUBLIC
                             $<INSTALL_INTERFACE:${include_dest}/hal>)
 target_link_libraries(hal PUBLIC wpiutil)
 
-SET(PHOENIX_LIBS_ROOT /workspace/production/ros/src/motor_control)
+SET(PHOENIX_LIBS_ROOT /usr/local/Phoenix/)
 if (${CMAKE_LIBRARY_ARCHITECTURE} STREQUAL "arm-linux-gnueabihf") # Jetson TK1 / Pi
     set(MOTOR_LIBS_DIR ${PHOENIX_LIBS_ROOT}/lib/arm32)
 elseif (${CMAKE_LIBRARY_ARCHITECTURE} STREQUAL "aarch64-linux-gnu") # Jetson TX2
