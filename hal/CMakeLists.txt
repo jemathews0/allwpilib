@@ -53,6 +53,25 @@ target_include_directories(hal PUBLIC
                             $<INSTALL_INTERFACE:${include_dest}/hal>)
 target_link_libraries(hal PUBLIC wpiutil)
 
+SET(PHOENIX_LIBS_ROOT /home/jonathan/git_repos/moonrockers_2023/ros/src/motor_control/)
+if (${CMAKE_LIBRARY_ARCHITECTURE} STREQUAL "arm-linux-gnueabihf") # Jetson TK1 / Pi
+    set(MOTOR_LIBS_DIR ${PHOENIX_LIBS_ROOT}/lib/arm32)
+elseif (${CMAKE_LIBRARY_ARCHITECTURE} STREQUAL "aarch64-linux-gnu") # Jetson TX2
+    set(MOTOR_LIBS_DIR ${PHOENIX_LIBS_ROOT}/lib/arm64)
+else()
+    set(MOTOR_LIBS_DIR ${PHOENIX_LIBS_ROOT}/lib/x86-64)
+endif()
+SET(CMAKE_EXE_LINKER_FLAGS "-Wl,--disable-new-dtags")
+include_directories(
+    ${PHOENIX_LIBS_ROOT}/include
+)
+target_link_libraries(
+  hal
+  PRIVATE 
+  ${MOTOR_LIBS_DIR}/libCTRE_Phoenix.so  
+  ${MOTOR_LIBS_DIR}/libCTRE_PhoenixCCI.so
+)
+
 set_property(TARGET hal PROPERTY FOLDER "libraries")
 
 install(TARGETS hal EXPORT hal DESTINATION "${main_lib_dest}")
